@@ -1,0 +1,9 @@
+├── LICENSE
+├── pyproject.toml
+├── README.md
+├── src/
+│   └── Assignment-10_EucretiaM/
+│       ├── __init__.py
+│       └── example.py
+└── tests/
+
