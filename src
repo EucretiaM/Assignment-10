@@ -1,1 +1,25 @@
+# src/models/user.py
+from uuid import uuid4
+from datetime import datetime
+
+class User:
+    def __init__(self, name, email, password_hash, role):
+        self.id = uuid4()
+        self.name = name
+        self.email = email
+        self.password_hash = password_hash
+        self.role = role
+        self.last_login = None
+
+    def login(self):
+        self.last_login = datetime.now()
+
+    def logout(self):
+        print(f"{self.name} logged out")
+
+    def update_profile(self, name=None, email=None):
+        if name:
+            self.name = name
+        if email:
+            self.email = email
 
