@@ -1,12 +1,22 @@
 # Math Booster - Class Implementations
 
-## Language Choice
-**Python** was chosen for its readability, dynamic typing, rich libraries, and strong community support for educational tools and rapid prototyping.
+[Programming language choice and key decisions](#programming-language-choice-and-key-decisions)
 
-## Design Decisions
-- All classes from the UML diagram are modeled using private attributes with appropriate methods.
-- Inheritance is used for `Learner` and `Educator` from the `User` base class.
-- UUIDs are used for unique identifiers.
-- Composition and method stubs reflect real behavior to be implemented later.
-- Separation of class responsibilities is preserved to align with SOLID principles.
+### Programming language choice and key decisions
 
+####  Why Python?
+
+Python was chosen for its:
+
+- **Simplicity & Readability** – Easy translation from UML to code with minimal syntax overhead.  
+- **Rapid Prototyping** – Ideal for fast development and iteration on design patterns.  
+- **Strong Testing Support** – Tools like `pytest` and `pytest-cov` enable clean, efficient testing and coverage reporting.  
+- **Community & Ecosystem** – Wide support for CI/CD, design pattern demos, and educational use cases.
+
+---
+
+####  Key Design Choices
+
+- **Clear Pattern Separation** – Each creational pattern is isolated in its own module.  
+- **UML Alignment** – Classes directly reflect the Mermaid class diagram.  
+- **CI-Ready** – Includes GitHub Actions + Codecov integration for automated testing and reporting.
