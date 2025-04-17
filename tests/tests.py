@@ -1,69 +1,133 @@
 import unittest
-import threading
-from creational_patterns import *
+from creational_patterns import (
+    AssessmentFactory,
+    QuizAssessment,
+    WrittenAssessment,
+    EmailNotificationSender,
+    EmailSender,
+    InAppNotificationSender,
+    InAppSender,
+    EducatorUIFactory,
+    EducatorDashboard,
+    EducatorButton,
+    LearnerUIFactory,
+    LearnerDashboard,
+    LearnerButton,
+    ReportBuilder,
+    AssessmentTemplate,
+    DatabaseConnection
+)
 
+# --------------------------------------------
+# 1. Simple Factory
+# --------------------------------------------
 class TestSimpleFactory(unittest.TestCase):
-    def test_valid_creation(self):
-        car = UserFactory.create_user("learner")
-        self.assertIsInstance(car, Learner)
+    def test_quiz_assessment_creation(self):
+        factory = AssessmentFactory()
+        assessment = factory.create_assessment("quiz")
+        self.assertIsInstance(assessment, QuizAssessment)
+        self.assertEqual(assessment.display(), "Quiz Assessment")
 
-    def test_invalid_creation(self):
+    def test_written_assessment_creation(self):
+        factory = AssessmentFactory()
+        assessment = factory.create_assessment("written")
+        self.assertIsInstance(assessment, WrittenAssessment)
+        self.assertEqual(assessment.display(), "Written Assessment")
+
+    def test_invalid_assessment_creation(self):
+        factory = AssessmentFactory()
         with self.assertRaises(ValueError):
-            UserFactory.create_user("invalid")
+            factory.create_assessment("invalid")
 
+# --------------------------------------------
+# 2. Factory Method
+# --------------------------------------------
 class TestFactoryMethod(unittest.TestCase):
-    def test_educator_creation(self):
-        creator = EducatorCreator()
-        user = creator.create_user()
-        self.assertIsInstance(user, Educator)
+    def test_email_sender_creation(self):
+        sender_factory = EmailNotificationSender()
+        sender = sender_factory.create_sender()
+        self.assertIsInstance(sender, EmailSender)
+        self.assertEqual(sender.send(), "Sending Email Notification")
 
+    def test_inapp_sender_creation(self):
+        sender_factory = InAppNotificationSender()
+        sender = sender_factory.create_sender()
+        self.assertIsInstance(sender, InAppSender)
+        self.assertEqual(sender.send(), "Sending In-App Notification")
+
+# --------------------------------------------
+# 3. Abstract Factory
+# --------------------------------------------
 class TestAbstractFactory(unittest.TestCase):
-    def test_learner_notification_factory(self):
-        factory = LearnerNotificationFactory()
-        notification = factory.create_notification("Test message")
-        self.assertIsInstance(notification, LearnerNotification)
-        self.assertEqual(notification.message, "Test message")
+    def test_educator_ui_creation(self):
+        ui_factory = EducatorUIFactory()
+        dashboard = ui_factory.create_dashboard()
+        button = ui_factory.create_button()
+        self.assertIsInstance(dashboard, EducatorDashboard)
+        self.assertIsInstance(button, EducatorButton)
+        self.assertEqual(dashboard.render(), "Educator Dashboard")
+        self.assertEqual(button.render(), "Educator Button")
 
-class TestBuilderPattern(unittest.TestCase):
-    def test_full_submission_build(self):
-        builder = SubmissionBuilder()
-        director = SubmissionDirector(builder)
-        submission = director.construct_submission("L1", "A1", "Work")
-        self.assertEqual(submission.learnerId, "L1")
-        self.assertEqual(submission.status, "Pending")
+    def test_learner_ui_creation(self):
+        ui_factory = LearnerUIFactory()
+        dashboard = ui_factory.create_dashboard()
+        button = ui_factory.create_button()
+        self.assertIsInstance(dashboard, LearnerDashboard)
+        self.assertIsInstance(button, LearnerButton)
+        self.assertEqual(dashboard.render(), "Learner Dashboard")
+        self.assertEqual(button.render(), "Learner Button")
 
-    def test_invalid_content(self):
-        builder = SubmissionBuilder()
-        builder.set_content("")
-        self.assertEqual(builder.submission.content, "")
+# --------------------------------------------
+# 4. Builder
+# --------------------------------------------
+class TestBuilder(unittest.TestCase):
+    def test_report_builder(self):
+        builder = ReportBuilder()
+        report = builder.add_top_performers().add_average_scores().build()
+        self.assertEqual(report.show(), ["Top Performers", "Average Scores"])
 
-class TestPrototypePattern(unittest.TestCase):
-    def test_clone_submission(self):
-        original = Submission("S1", "L1", "A1", "Work", "2024-01-01", "Submitted", 100)
-        clone = original.clone()
-        self.assertIsNot(original, clone)
-        self.assertEqual(clone.content, "Work")
+    def test_empty_report(self):
+        builder = ReportBuilder()
+        report = builder.build()
+        self.assertEqual(report.show(), [])
 
-class TestSingletonPattern(unittest.TestCase):
-    def test_single_instance(self):
-        a = AppSettings()
-        b = AppSettings()
-        self.assertIs(a, b)
+# --------------------------------------------
+# 5. Prototype
+# --------------------------------------------
+class TestPrototype(unittest.TestCase):
+    def test_assessment_template_clone(self):
+        template = AssessmentTemplate("Math Quiz", "Solve all questions")
+        clone = template.clone()
+        self.assertIsNot(template, clone)
+        self.assertEqual(template.title, clone.title)
+        self.assertEqual(template.instructions, clone.instructions)
+
+# --------------------------------------------
+# 6. Singleton
+# --------------------------------------------
+import threading
+
+class TestSingleton(unittest.TestCase):
+    def test_singleton_instance(self):
+        instance1 = DatabaseConnection()
+        instance2 = DatabaseConnection()
+        self.assertIs(instance1, instance2)
+        self.assertEqual(instance1.get_connection(), "Connected to DB")
 
     def test_thread_safety(self):
         instances = []
 
         def create_instance():
-            instances.append(AppSettings())
+            instances.append(DatabaseConnection())
 
         threads = [threading.Thread(target=create_instance) for _ in range(10)]
-        for t in threads:
-            t.start()
-        for t in threads:
-            t.join()
+        for thread in threads:
+            thread.start()
+        for thread in threads:
+            thread.join()
 
-        self.assertTrue(all(i is instances[0] for i in instances))
+        for instance in instances:
+            self.assertIs(instance, instances[0])
 
 if __name__ == '__main__':
     unittest.main()
-
