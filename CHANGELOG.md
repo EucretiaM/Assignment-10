@@ -41,3 +41,44 @@ Implemented the class diagram in Python code to model user roles and entities in
 ### Fixed
 - Enhanced modularity by separating each class and test pattern into standalone files.
 - Improved usability and extensibility by centralizing imports in the `creational_patterns/__init__.py`.
+
+Sure, here's the updated `CHANGELOG.md` with version numbers:
+
+---
+
+# CHANGELOG
+
+## [1.0.0] - 2025-04-21
+
+### Added
+- **Simple Factory for Assessment Creation**
+  - Implemented `AssessmentFactory` to handle assessment creation logic.
+  - Returns `QuizAssessment` and `WrittenAssessment`.
+  - **Rationale:** Encapsulates conditional logic and simplifies object creation for assessments.
+  - **Status:** ✅ Resolved 
+
+- **Factory Method for Notification Sending**
+  - Implemented `NotificationSender` with subclasses `EmailNotificationSender` and `InAppNotificationSender`.
+  - **Rationale:** Allows flexibility to support multiple notification types and makes it easy to extend by adding new types of notifications without modifying the base `NotificationSender`.
+  - **Status:** ✅ Resolved 
+
+- **Abstract Factory for UI Theme Management**
+  - Implemented `EducatorUIFactory` and `LearnerUIFactory` to provide `Dashboard` and `Button`.
+  - **Rationale:** Ensures a cohesive set of UI components tailored to the user role, making the code modular and reducing coupling between the components.
+  - **Status:** ✅ Resolved 
+
+- **Builder for Report Generation**
+  - Implemented `ReportBuilder` to construct reports with sections like `Top Performers` and `Average Scores`.
+  - **Rationale:** Provides a step-by-step mechanism to compose report sections in a controlled manner, eliminating the need for constructors with long parameter lists.
+  - **Status:** ✅ Resolved 
+
+- **Prototype for Assessment Templates**
+  - Implemented `AssessmentTemplate` that can be cloned.
+  - **Rationale:** Allows educators to clone a pre-existing template instead of re-creating it from scratch, saving time and ensuring consistency.
+  - **Status:** ✅ Resolved 
+
+- **Singleton for Database Connection**
+  - Implemented `DatabaseConnection` to ensure only one instance is created and shared across the application.
+  - **Rationale:** Ensures proper behavior in multi-threaded environments and avoids resource-intensive multiple connections.
+  - **Status:** ✅ Resolved 
+
